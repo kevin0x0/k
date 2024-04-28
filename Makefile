@@ -10,8 +10,6 @@ INC_DIR = $(ROOT_DIR)include/
 SRC_DIR = $(ROOT_DIR)src/
 LIB_DIR = $(ROOT_DIR)lib/
 
-OBJP_INC_DIR = $(INC_DIR)object_pool/
-OBJP_DIR = $(SRC_DIR)object_pool/
 HMAP_INC_DIR = $(INC_DIR)hashmap/
 HMAP_DIR = $(SRC_DIR)hashmap/
 SET_INC_DIR = $(INC_DIR)set/
@@ -20,25 +18,20 @@ ARRAY_INC_DIR = $(INC_DIR)array/
 ARRAY_DIR = $(SRC_DIR)array/
 QUEUE_INC_DIR = $(INC_DIR)queue/
 QUEUE_DIR = $(SRC_DIR)queue/
-LIST_INC_DIR = $(INC_DIR)list/
-LIST_DIR = $(SRC_DIR)list/
 OS_SPEC_DIR = $(SRC_DIR)os_spec/
 OS_SPEC_INC_DIR = $(INC_DIR)os_spec/
 STR_DIR = $(SRC_DIR)string/
 STR_INC_DIR = $(INC_DIR)string/
-KSTR_DIR = $(SRC_DIR)kstring/
-KSTR_INC_DIR = $(INC_DIR)kstring/
 KIO_DIR = $(SRC_DIR)kio/
 KIO_INC_DIR = $(INC_DIR)kio/
 
-GEN_INC_DIR = $(INC_DIR)general/
+OBJS = $(LIB_DIR)dir.o $(LIB_DIR)file.o $(LIB_DIR)setint_map.o $(LIB_DIR)strx_map.o \
+       $(LIB_DIR)kmap.o $(LIB_DIR)bitset.o $(LIB_DIR)hashset.o $(LIB_DIR)kiqueue.o \
+       $(LIB_DIR)kqueue.o $(LIB_DIR)karray.o $(LIB_DIR)ko.o $(LIB_DIR)ki.o  $(LIB_DIR)kobuf.o \
+       $(LIB_DIR)kibuf.o $(LIB_DIR)kofile.o $(LIB_DIR)kifile.o $(LIB_DIR)ko_printf.o
 
 
-
-$(LIB_DIR)libutils.a : $(LIB_DIR)dir.o $(LIB_DIR)file.o $(LIB_DIR)setint_map.o $(LIB_DIR)strx_map.o \
-											 $(LIB_DIR)kmap.o $(LIB_DIR)bitset.o $(LIB_DIR)hashset.o $(LIB_DIR)kiqueue.o \
-											 $(LIB_DIR)kqueue.o $(LIB_DIR)karray.o $(LIB_DIR)ko.o $(LIB_DIR)ki.o  $(LIB_DIR)kobuf.o \
-											 $(LIB_DIR)kibuf.o $(LIB_DIR)kofile.o $(LIB_DIR)kifile.o $(LIB_DIR)ko_printf.o | create_lib_dir
+$(LIB_DIR)libk.a : $(OBJS) | create_lib_dir
 	$(AR) $@ $^
 
 

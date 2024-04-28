@@ -1,7 +1,7 @@
 #ifndef KEVCC_UTILS_INCLUDE_ARRAY_KGARRAY_H
 #define KEVCC_UTILS_INCLUDE_ARRAY_KGARRAY_H
 
-#include "include/utils/utils.h"
+#include "include/kutils/utils.h"
 #include <stddef.h>
 #include <stdbool.h>
 #include <stdlib.h>

@@ -2,7 +2,7 @@
 #define KEVCC_UTILS_INCLUDE_SET_BITSET_H
 
 #include "include/bits/bitop.h"
-#include "include/utils/utils.h"
+#include "include/kutils/utils.h"
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>

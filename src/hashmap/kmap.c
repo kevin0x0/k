@@ -1,5 +1,5 @@
 #include "include/hashmap/kmap.h"
-#include "include/utils/utils.h"
+#include "include/kutils/utils.h"
 
 #include <stdlib.h>
 

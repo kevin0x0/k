@@ -1,2 +1,0 @@
-let fibonacci = n -> n <= 1 ? n : fibonacci(n - 1) + fibonacci(n - 1);
-print(fibonacci n)

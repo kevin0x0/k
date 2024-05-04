@@ -9,96 +9,156 @@ ROOT_DIR = $(abspath .)/
 INC_DIR = $(ROOT_DIR)include/
 SRC_DIR = $(ROOT_DIR)src/
 LIB_DIR = $(ROOT_DIR)lib/
-
-HMAP_INC_DIR = $(INC_DIR)hashmap/
-HMAP_DIR = $(SRC_DIR)hashmap/
-SET_INC_DIR = $(INC_DIR)set/
-SET_DIR = $(SRC_DIR)set/
-ARRAY_INC_DIR = $(INC_DIR)array/
-ARRAY_DIR = $(SRC_DIR)array/
-QUEUE_INC_DIR = $(INC_DIR)queue/
-QUEUE_DIR = $(SRC_DIR)queue/
-OS_SPEC_DIR = $(SRC_DIR)os_spec/
-OS_SPEC_INC_DIR = $(INC_DIR)os_spec/
-STR_DIR = $(SRC_DIR)string/
-STR_INC_DIR = $(INC_DIR)string/
-KIO_DIR = $(SRC_DIR)kio/
-KIO_INC_DIR = $(INC_DIR)kio/
-
-OBJS = $(LIB_DIR)dir.o $(LIB_DIR)file.o $(LIB_DIR)setint_map.o $(LIB_DIR)strx_map.o \
-       $(LIB_DIR)kmap.o $(LIB_DIR)bitset.o $(LIB_DIR)hashset.o $(LIB_DIR)kiqueue.o \
-       $(LIB_DIR)kqueue.o $(LIB_DIR)karray.o $(LIB_DIR)ko.o $(LIB_DIR)ki.o  $(LIB_DIR)kobuf.o \
-       $(LIB_DIR)kibuf.o $(LIB_DIR)kofile.o $(LIB_DIR)kifile.o $(LIB_DIR)ko_printf.o
+OBJ_DIR := $(ROOT_DIR)obj/
 
 
-$(LIB_DIR)libk.a : $(OBJS) | create_lib_dir
+OBJS = $(OBJ_DIR)setint_map.o $(OBJ_DIR)strx_map.o $(OBJ_DIR)kmap.o $(OBJ_DIR)bitset.o \
+       $(OBJ_DIR)hashset.o $(OBJ_DIR)kiqueue.o $(OBJ_DIR)kqueue.o $(OBJ_DIR)karray.o \
+       $(OBJ_DIR)ko.o $(OBJ_DIR)ki.o  $(OBJ_DIR)kobuf.o $(OBJ_DIR)kibuf.o $(OBJ_DIR)kofile.o \
+       $(OBJ_DIR)kifile.o $(OBJ_DIR)ko_printf.o	$(OBJ_DIR)klib.o $(OBJ_DIR)kfs.o
+
+PIC_OBJS = $(patsubst %.o, %.pic.o, $(OBJS))
+
+
+all : $(LIB_DIR)libk.a $(LIB_DIR)libk.so
+
+
+$(LIB_DIR)libk.a : $(OBJS) | create_dir
 	$(AR) $@ $^
 
+$(LIB_DIR)libk.so : $(PIC_OBJS) | create_dir
+	$(CC) -shared -o $@ $^
 
-$(LIB_DIR)dir.o : $(OS_SPEC_DIR)dir.c $(OS_SPEC_INC_DIR)dir.h | create_lib_dir
-	$(CC) -c -o $@ $< $(CFLAGS) 
 
-$(LIB_DIR)file.o : $(OS_SPEC_DIR)file.c $(OS_SPEC_INC_DIR)file.h | create_lib_dir
-	$(CC) -c -o $@ $< $(CFLAGS) 
-
-$(LIB_DIR)kmap.o : $(HMAP_DIR)kmap.c $(HMAP_INC_DIR)kmap.h | create_lib_dir
+$(OBJ_DIR)klib.o : $(SRC_DIR)lib/lib.c $(INC_DIR)lib/lib.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(LIB_DIR)intset_map.o : $(HMAP_DIR)intset_map.c $(HMAP_INC_DIR)intset_map.h $(SET_INC_DIR)bitset.h | create_lib_dir
+$(OBJ_DIR)kmap.o : $(SRC_DIR)hashmap/kmap.c $(INC_DIR)hashmap/kmap.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(LIB_DIR)setint_map.o : $(HMAP_DIR)setint_map.c $(HMAP_INC_DIR)setint_map.h $(SET_INC_DIR)bitset.h | create_lib_dir
+$(OBJ_DIR)intset_map.o : $(SRC_DIR)hashmap/intset_map.c $(INC_DIR)hashmap/intset_map.h $(INC_DIR)set/bitset.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(LIB_DIR)str_map.o : $(HMAP_DIR)str_map.c $(HMAP_INC_DIR)str_map.h | create_lib_dir
+$(OBJ_DIR)setint_map.o : $(SRC_DIR)hashmap/setint_map.c $(INC_DIR)hashmap/setint_map.h $(INC_DIR)set/bitset.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(LIB_DIR)strx_map.o : $(HMAP_DIR)strx_map.c $(HMAP_INC_DIR)strx_map.h | create_lib_dir
+$(OBJ_DIR)str_map.o : $(SRC_DIR)hashmap/str_map.c $(INC_DIR)hashmap/str_map.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(LIB_DIR)bitset.o : $(SET_DIR)bitset.c $(SET_INC_DIR)bitset.h | create_lib_dir
+$(OBJ_DIR)strx_map.o : $(SRC_DIR)hashmap/strx_map.c $(INC_DIR)hashmap/strx_map.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(LIB_DIR)hashset.o : $(SET_DIR)hashset.c $(SET_INC_DIR)hashset.h | create_lib_dir
+$(OBJ_DIR)bitset.o : $(SRC_DIR)set/bitset.c $(INC_DIR)set/bitset.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(LIB_DIR)karray.o : $(ARRAY_DIR)karray.c $(ARRAY_INC_DIR)karray.h | create_lib_dir
+$(OBJ_DIR)hashset.o : $(SRC_DIR)set/hashset.c $(INC_DIR)set/hashset.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(LIB_DIR)kiqueue.o : $(QUEUE_DIR)kiqueue.c $(QUEUE_INC_DIR)kiqueue.h | create_lib_dir
+$(OBJ_DIR)karray.o : $(SRC_DIR)array/karray.c $(INC_DIR)array/karray.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(LIB_DIR)kqueue.o : $(QUEUE_DIR)kqueue.c $(QUEUE_INC_DIR)kqueue.h | create_lib_dir
+$(OBJ_DIR)kiqueue.o : $(SRC_DIR)queue/kiqueue.c $(INC_DIR)queue/kiqueue.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(LIB_DIR)plugin.o : $(OS_SPEC_DIR)plugin.c $(OS_SPEC_INC_DIR)plugin.h | create_lib_dir
+$(OBJ_DIR)kqueue.o : $(SRC_DIR)queue/kqueue.c $(INC_DIR)queue/kqueue.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(LIB_DIR)ki.o : $(KIO_DIR)ki.c $(KIO_INC_DIR)ki.h | create_lib_dir
+$(OBJ_DIR)plugin.o : $(OS_SPEC_DIR)plugin.c $(OS_SPEC_INC_DIR)plugin.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(LIB_DIR)ko.o : $(KIO_DIR)ko.c $(KIO_INC_DIR)ko.h | create_lib_dir
+$(OBJ_DIR)ki.o : $(SRC_DIR)kio/ki.c $(INC_DIR)kio/ki.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(LIB_DIR)kibuf.o : $(KIO_DIR)kibuf.c $(KIO_INC_DIR)kibuf.h | create_lib_dir
+$(OBJ_DIR)ko.o : $(SRC_DIR)kio/ko.c $(INC_DIR)kio/ko.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(LIB_DIR)kobuf.o : $(KIO_DIR)kobuf.c $(KIO_INC_DIR)kobuf.h | create_lib_dir
+$(OBJ_DIR)kibuf.o : $(SRC_DIR)kio/kibuf.c $(INC_DIR)kio/kibuf.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(LIB_DIR)kifile.o : $(KIO_DIR)kifile.c $(KIO_INC_DIR)kifile.h | create_lib_dir
+$(OBJ_DIR)kobuf.o : $(SRC_DIR)kio/kobuf.c $(INC_DIR)kio/kobuf.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(LIB_DIR)kofile.o : $(KIO_DIR)kofile.c $(KIO_INC_DIR)kofile.h | create_lib_dir
+$(OBJ_DIR)kifile.o : $(SRC_DIR)kio/kifile.c $(INC_DIR)kio/kifile.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(LIB_DIR)ko_printf.o : $(KIO_DIR)ko_printf.c $(KIO_INC_DIR)kio.h | create_lib_dir
+$(OBJ_DIR)kofile.o : $(SRC_DIR)kio/kofile.c $(INC_DIR)kio/kofile.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+$(OBJ_DIR)ko_printf.o : $(SRC_DIR)kio/ko_printf.c $(INC_DIR)kio/kio.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+$(OBJ_DIR)kfs.o : $(SRC_DIR)os_spec/kfs.c $(INC_DIR)os_spec/kfs.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 
-.PHONY: clean create_lib_dir
+# --------------------------SHARED OBJECT--------------------------------------
+
+$(OBJ_DIR)klib.pic.o : $(SRC_DIR)lib/lib.c $(INC_DIR)lib/lib.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)kmap.pic.o : $(SRC_DIR)hashmap/kmap.c $(INC_DIR)hashmap/kmap.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)intset_map.pic.o : $(SRC_DIR)hashmap/intset_map.c $(INC_DIR)hashmap/intset_map.h $(INC_DIR)set/bitset.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)setint_map.pic.o : $(SRC_DIR)hashmap/setint_map.c $(INC_DIR)hashmap/setint_map.h $(INC_DIR)set/bitset.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)str_map.pic.o : $(SRC_DIR)hashmap/str_map.c $(INC_DIR)hashmap/str_map.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)strx_map.pic.o : $(SRC_DIR)hashmap/strx_map.c $(INC_DIR)hashmap/strx_map.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)bitset.pic.o : $(SRC_DIR)set/bitset.c $(INC_DIR)set/bitset.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)hashset.pic.o : $(SRC_DIR)set/hashset.c $(INC_DIR)set/hashset.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)karray.pic.o : $(SRC_DIR)array/karray.c $(INC_DIR)array/karray.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)kiqueue.pic.o : $(SRC_DIR)queue/kiqueue.c $(INC_DIR)queue/kiqueue.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)kqueue.pic.o : $(SRC_DIR)queue/kqueue.c $(INC_DIR)queue/kqueue.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)plugin.pic.o : $(OS_SPEC_DIR)plugin.c $(OS_SPEC_INC_DIR)plugin.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)ki.pic.o : $(SRC_DIR)kio/ki.c $(INC_DIR)kio/ki.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)ko.pic.o : $(SRC_DIR)kio/ko.c $(INC_DIR)kio/ko.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)kibuf.pic.o : $(SRC_DIR)kio/kibuf.c $(INC_DIR)kio/kibuf.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)kobuf.pic.o : $(SRC_DIR)kio/kobuf.c $(INC_DIR)kio/kobuf.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)kifile.pic.o : $(SRC_DIR)kio/kifile.c $(INC_DIR)kio/kifile.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)kofile.pic.o : $(SRC_DIR)kio/kofile.c $(INC_DIR)kio/kofile.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)ko_printf.pic.o : $(SRC_DIR)kio/ko_printf.c $(INC_DIR)kio/kio.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)kfs.pic.o : $(SRC_DIR)os_spec/kfs.c $(INC_DIR)os_spec/kfs.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+
+
+
+.PHONY: clean create_dir all
 clean :
-	$(RM) $(LIB_DIR)*
+	$(RM) -r $(OBJ_DIR)* $(LIB_DIR)*
 
-create_lib_dir :
-	mkdir -p $(LIB_DIR)
+create_dir :
+	mkdir -p $(OBJ_DIR) $(LIB_DIR)

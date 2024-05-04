@@ -1,5 +1,5 @@
 #include "include/kio/kofile.h"
-#include "include/os_spec/file.h"
+#include "include/os_spec/kfs.h"
 
 #include <stdlib.h>
 
@@ -84,5 +84,5 @@ void kofile_detach(KoFile* kofile) {
 }
 
 size_t kofile_size(KoFile* kofile) {
-  return kev_file_size(kofile->file);
+  return kfs_file_size(kofile->file);
 }

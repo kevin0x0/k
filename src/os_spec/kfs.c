@@ -1,5 +1,6 @@
-#include "include/os_spec/dir.h"
+#include "include/os_spec/kfs.h"
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -9,7 +10,7 @@
 #include <unistd.h>
 #endif
 
-char* kev_get_bin_dir(void) {
+char* kfs_get_bin_dir(void) {
   char* buf = NULL;
   size_t buf_size = 64;
 #ifdef _WIN32
@@ -37,7 +38,7 @@ char* kev_get_bin_dir(void) {
   return buf;
 }
 
-char* kev_get_relpath(const char* from, const char* to) {
+char* kfs_get_relpath(const char* from, const char* to) {
   size_t i = 0;
   while (from[i] == to[i] && from[i] != '\0')
     i++;
@@ -61,7 +62,7 @@ char* kev_get_relpath(const char* from, const char* to) {
   return relpath;
 }
 
-char* kev_trunc_leaf(const char* path) {
+char* kfs_trunc_leaf(const char* path) {
   size_t i = 0;
   size_t len = strlen(path);
   char* cp_path = (char*)malloc((len + 1) * sizeof (char));
@@ -76,10 +77,36 @@ char* kev_trunc_leaf(const char* path) {
   return cp_path;
 }
 
-bool kev_is_relative(const char* path) {
+bool kfs_is_relative(const char* path) {
 #ifdef _WIN32
   return !isupper(path[0]) || path[1] != ':';
 #else
   return path[0] != '/';
 #endif
 }
+
+#ifdef _WIN32
+#include <windows.h>
+#include <fileapi.h>
+
+size_t kev_file_size(FILE* file) {
+  HANDLE hfile = (HANDLE)_get_osfhandle(_fileno(file));
+  LARGE_INTEGER li;
+  GetFileSizeEx(hfile, &li);
+  size_t size = li.QuadPart;
+  return size;
+}
+
+#else
+#include <unistd.h>
+#include <sys/stat.h>
+#include <stdio.h>
+
+size_t kfs_file_size(FILE* file) {
+  int fd = fileno(file);
+  struct stat file_state;
+  fstat(fd, &file_state);
+  return file_state.st_size;
+}
+
+#endif

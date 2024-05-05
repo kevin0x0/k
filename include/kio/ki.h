@@ -1,5 +1,5 @@
-#ifndef KEVCC_UTILS_INCLUDE_KIO_KI_H
-#define KEVCC_UTILS_INCLUDE_KIO_KI_H
+#ifndef _K_INCLUDE_KIO_KI_H_
+#define _K_INCLUDE_KIO_KI_H_
 
 #include <stdint.h>
 #include <stddef.h>

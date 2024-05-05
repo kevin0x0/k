@@ -1,5 +1,5 @@
-#ifndef KEVCC_UTILS_INCLUDE_BITS_BITOP_H
-#define KEVCC_UTILS_INCLUDE_BITS_BITOP_H
+#ifndef _K_INCLUDE_BITS_BITOP_H_
+#define _K_INCLUDE_BITS_BITOP_H_
 
 #if defined (__GNUC__) || defined (__clang__)
 #define kbit_ctz(x)         (__builtin_ctzll(x))

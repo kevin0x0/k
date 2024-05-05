@@ -1,5 +1,5 @@
-#ifndef KEVCC_UTILS_INCLUDE_SET_BITSET_H
-#define KEVCC_UTILS_INCLUDE_SET_BITSET_H
+#ifndef _K_INCLUDE_SET_BITSET_H_
+#define _K_INCLUDE_SET_BITSET_H_
 
 #include "include/bits/bitop.h"
 #include "include/kutils/utils.h"

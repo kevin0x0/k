@@ -1,5 +1,5 @@
-#ifndef KEVCC_UTILS_INCLUDE_QUEUE_INT_QUEUE_H
-#define KEVCC_UTILS_INCLUDE_QUEUE_INT_QUEUE_H
+#ifndef _K_INCLUDE_QUEUE_KIQUEUE_H_
+#define _K_INCLUDE_QUEUE_KIQUEUE_H_
 
 #include "include/kutils/utils.h"
 #include <stdbool.h>

@@ -1,5 +1,5 @@
-#ifndef KEVCC_UTILS_INCLUDE_ARRAY_KGARRAY_H
-#define KEVCC_UTILS_INCLUDE_ARRAY_KGARRAY_H
+#ifndef _K_INCLUDE_ARRAY_KGARRAY_H_
+#define _K_INCLUDE_ARRAY_KGARRAY_H_
 
 #include "include/kutils/utils.h"
 #include <stddef.h>

@@ -1,5 +1,5 @@
-#ifndef KEVCC_UTILS_INCLUDE_LIB_H
-#define KEVCC_UTILS_INCLUDE_LIB_H
+#ifndef _K_INCLUDE_LIB_LIB_H_
+#define _K_INCLUDE_LIB_LIB_H_
 #include <stddef.h>
 
 /* Due to platform-specificity, this file defines some wrapper functions for library loader */

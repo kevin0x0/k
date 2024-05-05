@@ -1,5 +1,5 @@
-#ifndef KEVCC_UTILS_INCLUDE_HASHMAP_ADDRESS_MAP_H
-#define KEVCC_UTILS_INCLUDE_HASHMAP_ADDRESS_MAP_H
+#ifndef _K_INCLUDE_HASHMAP_KMAP_H_
+#define _K_INCLUDE_HASHMAP_KMAP_H_
 
 #include <stdbool.h>
 #include <stddef.h>

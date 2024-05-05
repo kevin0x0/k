@@ -1,5 +1,5 @@
-#ifndef KEVCC_UTILS_INCLUDE_KIO_KIBUF_H
-#define KEVCC_UTILS_INCLUDE_KIO_KIBUF_H
+#ifndef _K_INCLUDE_KIO_KIBUF_H_
+#define _K_INCLUDE_KIO_KIBUF_H_
 
 #include "include/kio/ki.h"
 

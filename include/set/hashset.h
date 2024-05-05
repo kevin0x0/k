@@ -1,5 +1,5 @@
-#ifndef KEVCC_UTILS_INCLUDE_SET_HASHSET_H
-#define KEVCC_UTILS_INCLUDE_SET_HASHSET_H
+#ifndef _K_INCLUDE_SET_HASHSET_H_
+#define _K_INCLUDE_SET_HASHSET_H_
 
 #include <stdbool.h>
 #include <stddef.h>

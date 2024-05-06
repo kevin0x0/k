@@ -1,6 +1,7 @@
 #ifndef _K_INCLUDE_KIO_KO_H_
 #define _K_INCLUDE_KIO_KO_H_
 
+#include "include/kio/kio_common.h"
 #include <stdarg.h>
 #include <stdint.h>
 #include <stddef.h>
@@ -9,7 +10,7 @@ typedef struct tagKo Ko;
 
 typedef void (*KoWriter)(Ko* ko);
 typedef void (*KoDelete)(Ko* ko);
-typedef size_t (*KoSize)(Ko* ko);
+typedef KioFileOffset (*KoSize)(Ko* ko);
 
 
 typedef struct KoVirtualFunc {
@@ -23,7 +24,7 @@ struct tagKo {
   unsigned char* buf;
   unsigned char* curr;
   unsigned char* end;
-  size_t headpos;
+  KioFileOffset headpos;
 };
 
 
@@ -32,9 +33,9 @@ static inline void ko_delete(Ko* ko);
 
 static inline size_t ko_bufused(Ko* ko);
 static inline size_t ko_bufsize(Ko* ko);
-static inline size_t ko_size(Ko* ko);
-static inline size_t ko_tell(Ko* ko);
-static inline void ko_seek(Ko* ko, size_t pos);
+static inline KioFileOffset ko_size(Ko* ko);
+static inline KioFileOffset ko_tell(Ko* ko);
+static inline void ko_seek(Ko* ko, KioFileOffset pos);
 
 static inline void ko_putc(Ko* ko, int ch);
 size_t ko_write(Ko* ko, void* buf, size_t bufsize);
@@ -46,8 +47,8 @@ int ko_vprintf(Ko* ko, const char* fmt, va_list arglist);
 
 
 static inline void* ko_getbuf(Ko* ko);
-static inline void ko_setbuf(Ko* ko, void* buf, size_t size, size_t headpos);
-static inline void ko_setbufcurr(Ko* ko, size_t offset);
+static inline void ko_setbuf(Ko* ko, void* buf, size_t size, KioFileOffset headpos);
+static inline void ko_setbufcurr(Ko* ko, KioFileOffset offset);
 
 
 static inline void ko_init(Ko* ko, KoVirtualFunc* vfunc) {
@@ -72,15 +73,15 @@ static inline size_t ko_bufsize(Ko* ko) {
   return ko->end - ko->buf;
 }
 
-static inline size_t ko_size(Ko* ko) {
+static inline KioFileOffset ko_size(Ko* ko) {
   return ko->vfunc->size(ko);
 }
 
-static inline size_t ko_tell(Ko* ko) {
+static inline KioFileOffset ko_tell(Ko* ko) {
   return ko->headpos + (ko->curr - ko->buf);
 }
 
-static inline void ko_seek(Ko* ko, size_t pos) {
+static inline void ko_seek(Ko* ko, KioFileOffset pos) {
   if (ko->curr != ko->buf)
     ko->vfunc->writer(ko);
 
@@ -101,14 +102,14 @@ static inline void* ko_getbuf(Ko* ko) {
   return ko->buf;
 }
 
-static inline void ko_setbuf(Ko* ko, void* buf, size_t size, size_t headpos) {
+static inline void ko_setbuf(Ko* ko, void* buf, size_t size, KioFileOffset headpos) {
   ko->buf = buf;
   ko->curr = buf;
   ko->end = (unsigned char*)buf + size;
   ko->headpos = headpos;
 }
 
-static inline void ko_setbufcurr(Ko* ko, size_t offset) {
+static inline void ko_setbufcurr(Ko* ko, KioFileOffset offset) {
   ko->curr = ko->buf + offset;
 }
 

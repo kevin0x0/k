@@ -1,4 +1,5 @@
 #include "include/kio/kofile.h"
+#include "include/kio/kio_common.h"
 #include "include/os_spec/kfs.h"
 
 #include <stdlib.h>
@@ -11,12 +12,12 @@ typedef struct tagKoFile {
   size_t default_bufsize;
 } KoFile;
 
-size_t kofile_size(KoFile* kofile);
-void kofile_writer(KoFile* kofile);
-void kofile_close(KoFile* kofile);
-void kofile_detach(KoFile* kofile);
+static KioFileOffset kofile_size(KoFile* kofile);
+static void kofile_writer(KoFile* kofile);
+static void kofile_close(KoFile* kofile);
+static void kofile_detach(KoFile* kofile);
 
-void kofile_stdwriter(KoFile* kofile);  /* writer for stderr and stdout */
+static void kofile_stdwriter(KoFile* kofile);  /* writer for stderr and stdout */
 
 static KoVirtualFunc kofile_create_vfunc = { .size = (KoSize)kofile_size, .delete = (KoDelete)kofile_close, .writer = (KoWriter)kofile_writer };
 static KoVirtualFunc kofile_attach_vfunc = { .size = (KoSize)kofile_size, .delete = (KoDelete)kofile_detach, .writer = (KoWriter)kofile_writer };
@@ -49,7 +50,7 @@ Ko* kofile_attach(FILE* file) {
   return (Ko*)kofile;
 }
 
-void kofile_writer(KoFile* kofile) {
+static void kofile_writer(KoFile* kofile) {
   size_t writepos = ko_tell((Ko*)kofile) - ko_bufused((Ko*)kofile);
   if (fseek(kofile->file, writepos, SEEK_SET)) {
     ko_setbuf((Ko*)kofile, ko_getbuf((Ko*)kofile), 0, writepos);
@@ -62,7 +63,7 @@ void kofile_writer(KoFile* kofile) {
   ko_setbuf((Ko*)kofile, buf, kofile->default_bufsize, writepos + writesize);
 }
 
-void kofile_stdwriter(KoFile* kofile) {
+static void kofile_stdwriter(KoFile* kofile) {
   size_t writepos = ko_tell((Ko*)kofile) - ko_bufused((Ko*)kofile);
   void* buf = ko_getbuf((Ko*)kofile);
   if (!buf && !(buf = malloc(kofile->default_bufsize)))
@@ -72,17 +73,17 @@ void kofile_stdwriter(KoFile* kofile) {
   ko_setbuf((Ko*)kofile, buf, kofile->default_bufsize, writepos + writesize);
 }
 
-void kofile_close(KoFile* kofile) {
+static void kofile_close(KoFile* kofile) {
   fclose(kofile->file);
   free(ko_getbuf((Ko*)kofile));
   free(kofile);
 }
 
-void kofile_detach(KoFile* kofile) {
+static void kofile_detach(KoFile* kofile) {
   free(ko_getbuf((Ko*)kofile));
   free(kofile);
 }
 
-size_t kofile_size(KoFile* kofile) {
+static KioFileOffset kofile_size(KoFile* kofile) {
   return kfs_file_size(kofile->file);
 }

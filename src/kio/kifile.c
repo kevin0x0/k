@@ -11,10 +11,10 @@ typedef struct tagKiFile {
   size_t default_bufsize;
 } KiFile;
 
-size_t kifile_size(KiFile* kifile);
-void kifile_reader(KiFile* kifile);
-void kifile_close(KiFile* kifile);
-void kifile_detach(KiFile* kifile);
+static KioFileOffset kifile_size(KiFile* kifile);
+static void kifile_reader(KiFile* kifile);
+static void kifile_close(KiFile* kifile);
+static void kifile_detach(KiFile* kifile);
 
 static KiVirtualFunc kifile_create_vfunc = { .size = (KiSize)kifile_size, .delete = (KiDelete)kifile_close, .reader = (KiReader)kifile_reader };
 static KiVirtualFunc kifile_attach_vfunc = { .size = (KiSize)kifile_size, .delete = (KiDelete)kifile_detach, .reader = (KiReader)kifile_reader };
@@ -42,7 +42,7 @@ Ki* kifile_attach(FILE* file) {
   return (Ki*)kifile;
 }
 
-void kifile_reader(KiFile* kifile) {
+static void kifile_reader(KiFile* kifile) {
   size_t readpos = ki_tell((Ki*)kifile);
   if (fseek(kifile->file, readpos, SEEK_SET)) {
     ki_setbuf((Ki*)kifile, ki_getbuf((Ki*)kifile), 0, readpos);
@@ -55,17 +55,17 @@ void kifile_reader(KiFile* kifile) {
   ki_setbuf((Ki*)kifile, buf, readsize, readpos);
 }
 
-void kifile_close(KiFile* kifile) {
+static void kifile_close(KiFile* kifile) {
   fclose(kifile->file);
   free(ki_getbuf((Ki*)kifile));
   free(kifile);
 }
 
-void kifile_detach(KiFile* kifile) {
+static void kifile_detach(KiFile* kifile) {
   free(ki_getbuf((Ki*)kifile));
   free(kifile);
 }
 
-size_t kifile_size(KiFile* kifile) {
+static KioFileOffset kifile_size(KiFile* kifile) {
   return kfs_file_size(kifile->file);
 }

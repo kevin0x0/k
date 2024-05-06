@@ -1,6 +1,7 @@
 #include "include/os_spec/kfs.h"
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -102,7 +103,7 @@ size_t kev_file_size(FILE* file) {
 #include <sys/stat.h>
 #include <stdio.h>
 
-size_t kfs_file_size(FILE* file) {
+uintmax_t kfs_file_size(FILE* file) {
   int fd = fileno(file);
   struct stat file_state;
   fstat(fd, &file_state);

@@ -1,4 +1,5 @@
 #include "include/kio/kibuf.h"
+#include "include/kio/kio_common.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -9,7 +10,7 @@ typedef struct tagKiBuf {
 } KiBuf;
 
 void kibuf_delete(KiBuf* kibuf);
-size_t kibuf_size(KiBuf* kibuf);
+KioFileOffset kibuf_size(KiBuf* kibuf);
 void kibuf_reader(KiBuf* kibuf);
 
 static KiVirtualFunc kibuf_vfunc = { .reader = (KiReader)kibuf_reader, .delete = (KiDelete)kibuf_delete, .size = (KiSize)kibuf_size };
@@ -29,7 +30,7 @@ void kibuf_delete(KiBuf* kibuf) {
   free(kibuf);
 }
 
-size_t kibuf_size(KiBuf* kibuf) {
+KioFileOffset kibuf_size(KiBuf* kibuf) {
   return kibuf->bufsize;
 }
 

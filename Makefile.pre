@@ -1,8 +1,10 @@
 CC = gcc
-CFLAGS = -O2 -I $(ROOT_DIR)
-AR = ar rcs
+OPTIMIZE = -O2
+MEMORY_CHECK =
+WARNING = -Wall -Wextra -Winline
+DEBUG = -DNDEBUG
 
-
+CFLAGS = $(OPTIMIZE) $(MEMORY_CHECK) $(WARNING) $(DEBUG) -I $(ROOT_DIR)
 
 ROOT_DIR = $(abspath .)/
 

@@ -1,5 +1,8 @@
 #include "include/os_spec/kfs.h"
+#include "include/kutils/utils.h"
 
+#include <asm-generic/errno-base.h>
+#include <errno.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -78,6 +81,61 @@ char* kfs_trunc_leaf(const char* path) {
   return cp_path;
 }
 
+char* kfs_getcwd(void) {
+  char* buf = NULL;
+  size_t size = 128;
+  while (true) {
+    char* newbuf = (char*)realloc(buf, size + 1);
+    if (!newbuf) {
+      free(buf);
+      return NULL;
+    }
+    buf = newbuf;
+#ifdef _WIN32
+    if (_getcwd(buf, size)) {
+#else
+    if (getcwd(buf, size)) {
+#endif
+      char* p = buf;
+      while (*p) {
+        if (*p == '\\') *p = '/';
+        ++p;
+      }
+      if (*(p - 1) != '/') {
+        *p++ = '/';
+        *p = '\0';
+      }
+      return buf;
+    }
+    if (errno != ERANGE) {
+      free(buf);
+      return NULL;
+    }
+    size = size + size / 2;
+  }
+}
+
+char* kfs_abspath(const char* path) {
+  if (!kfs_is_relative(path)) {
+    char* res = (char*)malloc(strlen(path) + 1);
+    if (k_unlikely(!res)) return NULL;
+    strcpy(res, path);
+    return res;
+  }
+  char* cwd = kfs_getcwd();
+  if (k_unlikely(!cwd)) return NULL;
+  size_t pathlen = strlen(path);
+  size_t cwdlen = strlen(cwd);
+  size_t abspathlen = cwdlen + pathlen;
+  char* abspath = (char*)realloc(cwd, abspathlen + 1);
+  if (k_unlikely(!abspath)) {
+    free(cwd);
+    return NULL;
+  }
+  memcpy(abspath + cwdlen, path, pathlen + 1);
+  return abspath;
+}
+
 bool kfs_is_relative(const char* path) {
 #ifdef _WIN32
   return !isupper(path[0]) || path[1] != ':';
@@ -90,7 +148,7 @@ bool kfs_is_relative(const char* path) {
 #include <windows.h>
 #include <fileapi.h>
 
-size_t kev_file_size(FILE* file) {
+size_t kfs_file_size(FILE* file) {
   HANDLE hfile = (HANDLE)_get_osfhandle(_fileno(file));
   LARGE_INTEGER li;
   GetFileSizeEx(hfile, &li);

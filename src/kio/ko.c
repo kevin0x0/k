@@ -3,6 +3,12 @@
 #include <string.h>
 
 
+void ko_delete(Ko* ko) {
+  if (ko_bufused(ko) != 0)
+    ko->vfunc->writer(ko);
+  ko->vfunc->delete(ko);
+}
+
 size_t ko_write(Ko* ko, void* buf, size_t bufsize) {
   size_t restsize = bufsize;
   buf = (char*)buf + bufsize;

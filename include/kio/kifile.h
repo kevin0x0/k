@@ -7,5 +7,6 @@
 
 Ki* kifile_create(const char* filepath);
 Ki* kifile_attach(FILE* file);
+Ki* kifile_attach_keepcontent(FILE* file);
 
 #endif

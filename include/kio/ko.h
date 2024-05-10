@@ -29,7 +29,7 @@ struct tagKo {
 
 
 static inline void ko_init(Ko* ko, KoVirtualFunc* vfunc);
-static inline void ko_delete(Ko* ko);
+void ko_delete(Ko* ko);
 
 static inline size_t ko_bufused(Ko* ko);
 static inline size_t ko_bufsize(Ko* ko);
@@ -57,12 +57,6 @@ static inline void ko_init(Ko* ko, KoVirtualFunc* vfunc) {
   ko->curr = NULL;
   ko->end = NULL;
   ko->headpos = 0;
-}
-
-static inline void ko_delete(Ko* ko) {
-  if (ko_bufused(ko) != 0)
-    ko->vfunc->writer(ko);
-  ko->vfunc->delete(ko);
 }
 
 static inline size_t ko_bufused(Ko* ko) {

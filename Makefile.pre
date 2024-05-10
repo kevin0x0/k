@@ -17,7 +17,7 @@ OBJ_DIR := $(ROOT_DIR)obj/
 OBJS = $(OBJ_DIR)setint_map.o $(OBJ_DIR)strx_map.o $(OBJ_DIR)kmap.o $(OBJ_DIR)bitset.o \
        $(OBJ_DIR)hashset.o $(OBJ_DIR)kiqueue.o $(OBJ_DIR)kqueue.o $(OBJ_DIR)karray.o \
        $(OBJ_DIR)ko.o $(OBJ_DIR)ki.o  $(OBJ_DIR)kobuf.o $(OBJ_DIR)kibuf.o $(OBJ_DIR)kofile.o \
-       $(OBJ_DIR)kifile.o $(OBJ_DIR)ko_printf.o	$(OBJ_DIR)lib.o $(OBJ_DIR)kfs.o
+       $(OBJ_DIR)kifile.o $(OBJ_DIR)ko_printf.o	$(OBJ_DIR)lib.o $(OBJ_DIR)kfs.o $(OBJ_DIR)kstring.o
 
 PIC_OBJS = $(patsubst %.o, %.pic.o, $(OBJS))
 

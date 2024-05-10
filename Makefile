@@ -17,7 +17,7 @@ OBJ_DIR := $(ROOT_DIR)obj/
 OBJS = $(OBJ_DIR)setint_map.o $(OBJ_DIR)strx_map.o $(OBJ_DIR)kmap.o $(OBJ_DIR)bitset.o \
        $(OBJ_DIR)hashset.o $(OBJ_DIR)kiqueue.o $(OBJ_DIR)kqueue.o $(OBJ_DIR)karray.o \
        $(OBJ_DIR)ko.o $(OBJ_DIR)ki.o  $(OBJ_DIR)kobuf.o $(OBJ_DIR)kibuf.o $(OBJ_DIR)kofile.o \
-       $(OBJ_DIR)kifile.o $(OBJ_DIR)ko_printf.o	$(OBJ_DIR)lib.o $(OBJ_DIR)kfs.o
+       $(OBJ_DIR)kifile.o $(OBJ_DIR)ko_printf.o	$(OBJ_DIR)lib.o $(OBJ_DIR)kfs.o $(OBJ_DIR)kstring.o
 
 PIC_OBJS = $(patsubst %.o, %.pic.o, $(OBJS))
 
@@ -71,7 +71,7 @@ $(OBJ_DIR)ko_printf.o : $(SRC_DIR)kio/ko_printf.c $(INC_DIR)kio/ko.h $(INC_DIR)k
 $(OBJ_DIR)lib.o : $(SRC_DIR)lib/lib.c $(INC_DIR)lib/lib.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(OBJ_DIR)kfs.o : $(SRC_DIR)os_spec/kfs.c $(INC_DIR)os_spec/kfs.h | create_dir
+$(OBJ_DIR)kfs.o : $(SRC_DIR)os_spec/kfs.c $(INC_DIR)os_spec/kfs.h $(INC_DIR)kutils/utils.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 $(OBJ_DIR)kiqueue.o : $(SRC_DIR)queue/kiqueue.c $(INC_DIR)queue/kiqueue.h $(INC_DIR)kutils/utils.h | create_dir
@@ -84,6 +84,9 @@ $(OBJ_DIR)bitset.o : $(SRC_DIR)set/bitset.c $(INC_DIR)set/bitset.h $(INC_DIR)bit
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 $(OBJ_DIR)hashset.o : $(SRC_DIR)set/hashset.c $(INC_DIR)set/hashset.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+$(OBJ_DIR)kstring.o : $(SRC_DIR)string/kstring.c $(INC_DIR)string/kstring.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 # ==========================SHARED OBJECT=============================
@@ -123,7 +126,7 @@ $(OBJ_DIR)ko_printf.pic.o : $(SRC_DIR)kio/ko_printf.c $(INC_DIR)kio/ko.h $(INC_D
 $(OBJ_DIR)lib.pic.o : $(SRC_DIR)lib/lib.c $(INC_DIR)lib/lib.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
 
-$(OBJ_DIR)kfs.pic.o : $(SRC_DIR)os_spec/kfs.c $(INC_DIR)os_spec/kfs.h | create_dir
+$(OBJ_DIR)kfs.pic.o : $(SRC_DIR)os_spec/kfs.c $(INC_DIR)os_spec/kfs.h $(INC_DIR)kutils/utils.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
 
 $(OBJ_DIR)kiqueue.pic.o : $(SRC_DIR)queue/kiqueue.c $(INC_DIR)queue/kiqueue.h $(INC_DIR)kutils/utils.h | create_dir
@@ -136,6 +139,9 @@ $(OBJ_DIR)bitset.pic.o : $(SRC_DIR)set/bitset.c $(INC_DIR)set/bitset.h $(INC_DIR
 	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
 
 $(OBJ_DIR)hashset.pic.o : $(SRC_DIR)set/hashset.c $(INC_DIR)set/hashset.h | create_dir
+	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
+
+$(OBJ_DIR)kstring.pic.o : $(SRC_DIR)string/kstring.c $(INC_DIR)string/kstring.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
 
 

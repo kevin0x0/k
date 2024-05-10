@@ -22,10 +22,13 @@ OBJS = $(OBJ_DIR)setint_map.o $(OBJ_DIR)strx_map.o $(OBJ_DIR)kmap.o $(OBJ_DIR)bi
 PIC_OBJS = $(patsubst %.o, %.pic.o, $(OBJS))
 
 
-all : $(LIB_DIR)libk.a $(LIB_DIR)libk.so
+all : $(LIB_DIR)libk.a $(LIB_DIR)libk.pic.a $(LIB_DIR)libk.so
 
 
 $(LIB_DIR)libk.a : $(OBJS) | create_dir
+	$(AR) $@ $^
+
+$(LIB_DIR)libk.pic.a : $(PIC_OBJS) | create_dir
 	$(AR) $@ $^
 
 $(LIB_DIR)libk.so : $(PIC_OBJS) | create_dir

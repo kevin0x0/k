@@ -22,10 +22,13 @@ OBJS = $(OBJ_DIR)setint_map.o $(OBJ_DIR)strx_map.o $(OBJ_DIR)kmap.o $(OBJ_DIR)bi
 PIC_OBJS = $(patsubst %.o, %.pic.o, $(OBJS))
 
 
-all : $(LIB_DIR)libk.a $(LIB_DIR)libk.so
+all : $(LIB_DIR)libk.a $(LIB_DIR)libk.pic.a $(LIB_DIR)libk.so
 
 
 $(LIB_DIR)libk.a : $(OBJS) | create_dir
+	$(AR) $@ $^
+
+$(LIB_DIR)libk.pic.a : $(PIC_OBJS) | create_dir
 	$(AR) $@ $^
 
 $(LIB_DIR)libk.so : $(PIC_OBJS) | create_dir
@@ -50,7 +53,7 @@ $(OBJ_DIR)kibuf.o : $(SRC_DIR)kio/kibuf.c $(INC_DIR)kio/kibuf.h $(INC_DIR)kio/ki
 $(OBJ_DIR)ki.o : $(SRC_DIR)kio/ki.c $(INC_DIR)kio/ki.h $(INC_DIR)kio/kio_common.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(OBJ_DIR)kifile.o : $(SRC_DIR)kio/kifile.c $(INC_DIR)kio/kifile.h $(INC_DIR)kio/ki.h $(INC_DIR)kio/kio_common.h $(INC_DIR)os_spec/kfs.h | create_dir
+$(OBJ_DIR)kifile.o : $(SRC_DIR)kio/kifile.c $(INC_DIR)kio/kifile.h $(INC_DIR)kio/ki.h $(INC_DIR)kio/kio_common.h $(INC_DIR)kutils/utils.h $(INC_DIR)os_spec/kfs.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 $(OBJ_DIR)kobuf.o : $(SRC_DIR)kio/kobuf.c $(INC_DIR)kio/kobuf.h $(INC_DIR)kio/ko.h $(INC_DIR)kio/kio_common.h | create_dir
@@ -102,7 +105,7 @@ $(OBJ_DIR)kibuf.pic.o : $(SRC_DIR)kio/kibuf.c $(INC_DIR)kio/kibuf.h $(INC_DIR)ki
 $(OBJ_DIR)ki.pic.o : $(SRC_DIR)kio/ki.c $(INC_DIR)kio/ki.h $(INC_DIR)kio/kio_common.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
 
-$(OBJ_DIR)kifile.pic.o : $(SRC_DIR)kio/kifile.c $(INC_DIR)kio/kifile.h $(INC_DIR)kio/ki.h $(INC_DIR)kio/kio_common.h $(INC_DIR)os_spec/kfs.h | create_dir
+$(OBJ_DIR)kifile.pic.o : $(SRC_DIR)kio/kifile.c $(INC_DIR)kio/kifile.h $(INC_DIR)kio/ki.h $(INC_DIR)kio/kio_common.h $(INC_DIR)kutils/utils.h $(INC_DIR)os_spec/kfs.h | create_dir
 	$(CC) -c -o $@ $< $(CFLAGS) -fPIC
 
 $(OBJ_DIR)kobuf.pic.o : $(SRC_DIR)kio/kobuf.c $(INC_DIR)kio/kobuf.h $(INC_DIR)kio/ko.h $(INC_DIR)kio/kio_common.h | create_dir

@@ -9,9 +9,9 @@ typedef struct tagKiBuf {
   size_t bufsize;
 } KiBuf;
 
-void kibuf_delete(KiBuf* kibuf);
-KioFileOffset kibuf_size(KiBuf* kibuf);
-void kibuf_reader(KiBuf* kibuf);
+static void kibuf_delete(KiBuf* kibuf);
+static KioFileOffset kibuf_size(KiBuf* kibuf);
+static void kibuf_reader(KiBuf* kibuf);
 
 static KiVirtualFunc kibuf_vfunc = { .reader = (KiReader)kibuf_reader, .delete = (KiDelete)kibuf_delete, .size = (KiSize)kibuf_size };
 
@@ -26,15 +26,15 @@ Ki* kibuf_create(const void* buf, size_t bufsize) {
   return (Ki*)kibuf;
 }
 
-void kibuf_delete(KiBuf* kibuf) {
+static void kibuf_delete(KiBuf* kibuf) {
   free(kibuf);
 }
 
-KioFileOffset kibuf_size(KiBuf* kibuf) {
+static KioFileOffset kibuf_size(KiBuf* kibuf) {
   return kibuf->bufsize;
 }
 
-void kibuf_reader(KiBuf* kibuf) {
+static void kibuf_reader(KiBuf* kibuf) {
   size_t readpos = ki_tell((Ki*)kibuf);
   if (readpos >= kibuf->bufsize) {
     ki_setbuf((Ki*)kibuf, ki_getbuf((Ki*)kibuf), 0, readpos);

@@ -46,9 +46,9 @@ gen_deps_pic() {
 
 cat Makefile.pre > Makefile
 
-gen_deps . ./src/ Makefile '$(CC) -c -o $@ $< $(CFLAGS)'
+gen_deps . ./src/ Makefile '$(CC) $(CFLAGS) -c -o $@ $<'
 
 echo "# ==========================SHARED OBJECT=============================" >> Makefile
-gen_deps_pic . ./src/ Makefile '$(CC) -c -o $@ $< $(CFLAGS) -fPIC'
+gen_deps_pic . ./src/ Makefile '$(CC) -fPIC $(CFLAGS) -c -o $@ $<'
 
 cat Makefile.post >> Makefile

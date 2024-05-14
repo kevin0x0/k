@@ -11,7 +11,7 @@ ROOT_DIR = $(abspath .)/
 INC_DIR = $(ROOT_DIR)include/
 SRC_DIR = $(ROOT_DIR)src/
 LIB_DIR = $(ROOT_DIR)lib/
-OBJ_DIR := $(ROOT_DIR)obj/
+OBJ_DIR = $(ROOT_DIR)obj/
 
 
 OBJS = $(OBJ_DIR)setint_map.o $(OBJ_DIR)strx_map.o $(OBJ_DIR)kmap.o $(OBJ_DIR)bitset.o \

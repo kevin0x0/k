@@ -1,8 +1,20 @@
 #include "include/lib/lib.h"
 
 #ifdef _WIN32
+#include <windows.h>
 
-kl_static_assert(false, "not implemented yet");
+KLib klib_dlopen(const char* libname) {
+  return (KLib) { .handle = LoadLibraryA(libname) };
+}
+
+void* klib_dlsym(KLib handle, const char* symname) {
+  return GetProcAddress(handle.handle, symname);
+}
+
+int klib_dlclose(KLib handle) {
+  return FreeLibrary(handle.handle);
+}
+
 
 #else
 

@@ -1,8 +1,6 @@
 #include "include/os_spec/kfs.h"
 #include "include/kutils/utils.h"
 
-#include <asm-generic/errno-base.h>
-#include <errno.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -10,6 +8,7 @@
 
 #ifdef _WIN32
 #include <windows.h>
+#include <direct.h>
 #else
 #include <unistd.h>
 #endif

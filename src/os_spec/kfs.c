@@ -11,6 +11,7 @@
 #include <direct.h>
 #else
 #include <unistd.h>
+#include <errno.h>
 #endif
 
 char* kfs_get_bin_dir(void) {

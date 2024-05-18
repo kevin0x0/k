@@ -13,7 +13,7 @@ static void kibuf_delete(KiBuf* kibuf);
 static KioFileOffset kibuf_size(KiBuf* kibuf);
 static void kibuf_reader(KiBuf* kibuf);
 
-static KiVirtualFunc kibuf_vfunc = { .reader = (KiReader)kibuf_reader, .delete = (KiDelete)kibuf_delete, .size = (KiSize)kibuf_size };
+static const KiVirtualFunc kibuf_vfunc = { .reader = (KiReader)kibuf_reader, .delete = (KiDelete)kibuf_delete, .size = (KiSize)kibuf_size };
 
 
 Ki* kibuf_create(const void* buf, size_t bufsize) {

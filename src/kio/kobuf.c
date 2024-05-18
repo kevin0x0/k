@@ -12,7 +12,7 @@ static void kobuf_delete(KoBuf* kobuf);
 static KioFileOffset kobuf_size(KoBuf* kobuf);
 static void kobuf_writer(KoBuf* kobuf);
 
-static KoVirtualFunc kobuf_vfunc = { .writer = (KoWriter)kobuf_writer, .delete = (KoDelete)kobuf_delete, .size = (KoSize)kobuf_size };
+static const KoVirtualFunc kobuf_vfunc = { .writer = (KoWriter)kobuf_writer, .delete = (KoDelete)kobuf_delete, .size = (KoSize)kobuf_size };
 
 
 Ko* kobuf_create(void* buf, size_t bufsize) {

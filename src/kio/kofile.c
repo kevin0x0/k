@@ -19,9 +19,9 @@ static void kofile_detach(KoFile* kofile);
 
 static void kofile_stdwriter(KoFile* kofile);  /* writer for stderr and stdout */
 
-static KoVirtualFunc kofile_create_vfunc = { .size = (KoSize)kofile_size, .delete = (KoDelete)kofile_close, .writer = (KoWriter)kofile_writer };
-static KoVirtualFunc kofile_attach_vfunc = { .size = (KoSize)kofile_size, .delete = (KoDelete)kofile_detach, .writer = (KoWriter)kofile_writer };
-static KoVirtualFunc kofile_stdstream_vfunc = { .size = (KoSize)kofile_size, .delete = (KoDelete)kofile_detach, .writer = (KoWriter)kofile_stdwriter };
+static const KoVirtualFunc kofile_create_vfunc = { .size = (KoSize)kofile_size, .delete = (KoDelete)kofile_close, .writer = (KoWriter)kofile_writer };
+static const KoVirtualFunc kofile_attach_vfunc = { .size = (KoSize)kofile_size, .delete = (KoDelete)kofile_detach, .writer = (KoWriter)kofile_writer };
+static const KoVirtualFunc kofile_stdstream_vfunc = { .size = (KoSize)kofile_size, .delete = (KoDelete)kofile_detach, .writer = (KoWriter)kofile_stdwriter };
 
 Ko* kofile_create(const char* filepath) {
   FILE* file = fopen(filepath, "wb");

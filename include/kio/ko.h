@@ -3,7 +3,6 @@
 
 #include "include/kio/kio_common.h"
 #include <stdarg.h>
-#include <stdint.h>
 #include <stddef.h>
 
 typedef struct tagKo Ko;
@@ -20,7 +19,7 @@ typedef struct KoVirtualFunc {
 } KoVirtualFunc;
 
 struct tagKo {
-  KoVirtualFunc* vfunc;
+  const KoVirtualFunc* vfunc;
   unsigned char* buf;
   unsigned char* curr;
   unsigned char* end;
@@ -28,7 +27,7 @@ struct tagKo {
 };
 
 
-static inline void ko_init(Ko* ko, KoVirtualFunc* vfunc);
+static inline void ko_init(Ko* ko, const KoVirtualFunc* vfunc);
 void ko_delete(Ko* ko);
 
 static inline size_t ko_bufused(Ko* ko);
@@ -51,7 +50,7 @@ static inline void ko_setbuf(Ko* ko, void* buf, size_t size, KioFileOffset headp
 static inline void ko_setbufcurr(Ko* ko, KioFileOffset offset);
 
 
-static inline void ko_init(Ko* ko, KoVirtualFunc* vfunc) {
+static inline void ko_init(Ko* ko, const KoVirtualFunc* vfunc) {
   ko->vfunc = vfunc;
   ko->buf = NULL;
   ko->curr = NULL;

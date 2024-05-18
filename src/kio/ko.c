@@ -1,5 +1,4 @@
 #include "include/kio/ko.h"
-#include <stdio.h>
 #include <string.h>
 
 

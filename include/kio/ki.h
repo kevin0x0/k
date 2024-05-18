@@ -2,7 +2,6 @@
 #define _K_INCLUDE_KIO_KI_H_
 
 #include "include/kio/kio_common.h"
-#include <stdint.h>
 #include <stddef.h>
 #include <stdio.h>
 
@@ -22,14 +21,14 @@ typedef struct KiVirtualFunc {
 } KiVirtualFunc;
 
 struct tagKi {
-  KiVirtualFunc* vfunc;
+  const KiVirtualFunc* vfunc;
   const unsigned char* buf;
   const unsigned char* curr;
   const unsigned char* end;
   KioFileOffset headpos;
 };
 
-static inline void ki_init(Ki* ki, KiVirtualFunc* vfunc);
+static inline void ki_init(Ki* ki, const KiVirtualFunc* vfunc);
 static inline void ki_delete(Ki* ki);
 
 static inline size_t ki_bufused(Ki* ki);
@@ -49,7 +48,7 @@ static inline void ki_setbuf(Ki* ki, const void* buf, size_t size, KioFileOffset
 static inline void ki_setbufcurr(Ki* ki, KioFileOffset offset);
 
 
-static inline void ki_init(Ki* ki, KiVirtualFunc* vfunc) {
+static inline void ki_init(Ki* ki, const KiVirtualFunc* vfunc) {
   ki->vfunc = vfunc;
   ki->buf = NULL;
   ki->curr = NULL;

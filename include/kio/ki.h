@@ -91,9 +91,7 @@ static inline int ki_getc(Ki* ki) {
 }
 
 static inline void ki_ungetc(Ki* ki) {
-  if (ki->curr == ki->buf)
-    ki_seek(ki, ki_tell(ki) - 1);
-  --ki->curr;
+  ki->curr == ki->buf ? ki_seek(ki, ki_tell(ki) - 1) : --ki->curr;
 }
 
 

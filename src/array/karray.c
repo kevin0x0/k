@@ -40,10 +40,11 @@ void karray_delete(KArray* array) {
 }
 
 bool karray_expand(KArray* array) {
-  size_t new_size = karray_size(array) * 2;
+  size_t old_size = karray_size(array);
+  size_t new_size = old_size * 2;
   void** new_array = (void**)realloc(array->begin, sizeof (void*) * new_size);
   if (k_unlikely(!new_array)) return false;
-  array->current = new_array + (array->current - array->begin);
+  array->current = new_array + old_size;
   array->begin = new_array;
   array->end = new_array + new_size;
   return true;

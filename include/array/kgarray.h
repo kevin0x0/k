@@ -126,10 +126,11 @@ kstatic void prefix##_delete(arrname* array) {                                  
 }                                                                               \
                                                                                 \
 kstatic bool prefix##_expand(arrname* array) {                                  \
-  size_t new_size = prefix##_size(array) * 2;                                   \
+  size_t old_size = prefix##_size(array);                                       \
+  size_t new_size = old_size * 2;                                               \
   T* new_array = (T*)realloc(array->begin, sizeof (T) * new_size);              \
   if (k_unlikely(!new_array)) return false;                                     \
-  array->current = new_array + (array->current - array->begin);                 \
+  array->current = new_array + old_size;                                        \
   array->begin = new_array;                                                     \
   array->end = new_array + new_size;                                            \
   return true;                                                                  \

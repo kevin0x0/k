@@ -37,7 +37,7 @@ static inline KioFileOffset ko_tell(Ko* ko);
 static inline void ko_seek(Ko* ko, KioFileOffset pos);
 
 static inline void ko_putc(Ko* ko, int ch);
-size_t ko_write(Ko* ko, void* buf, size_t bufsize);
+size_t ko_write(Ko* ko, const void* buf, size_t bufsize);
 void ko_flush(Ko* ko);
 void ko_writenext(Ko* ko, int ch);
 

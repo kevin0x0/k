@@ -8,7 +8,7 @@ void ko_delete(Ko* ko) {
   ko->vfunc->delete(ko);
 }
 
-size_t ko_write(Ko* ko, void* buf, size_t bufsize) {
+size_t ko_write(Ko* ko, const void* buf, size_t bufsize) {
   size_t restsize = bufsize;
   buf = (char*)buf + bufsize;
   while (restsize != 0) {

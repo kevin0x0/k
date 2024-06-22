@@ -33,8 +33,8 @@ static const KiVirtualFunc kifile_create_vfunc = { .size = (KiSize)kifile_size, 
 static const KiVirtualFunc kifile_attach_vfunc = { .size = (KiSize)kifile_size, .delete = (KiDelete)kifile_detach, .reader = (KiReader)kifile_reader };
 static const KiVirtualFunc kifile_attach_keepcontent_vfunc = { .size = (KiSize)kifile_size, .delete = (KiDelete)kifile_detach_keepcontent, .reader = (KiReader)kifile_reader_keepcontent };
 
-Ki* kifile_create(const char* filepath) {
-  FILE* file = fopen(filepath, "rb");
+Ki* kifile_create(const char* filepath, const char* mode) {
+  FILE* file = fopen(filepath, mode);
   if (!file) return NULL;
   KiFile* kifile = (KiFile*)malloc(sizeof (KiFile));
   if (!kifile) {

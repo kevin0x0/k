@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 
-Ki* kifile_create(const char* filepath);
+Ki* kifile_create(const char* filepath, const char* mode);
 Ki* kifile_attach(FILE* file);
 Ki* kifile_attach_keepcontent(FILE* file);
 

@@ -23,8 +23,8 @@ static const KoVirtualFunc kofile_create_vfunc = { .size = (KoSize)kofile_size, 
 static const KoVirtualFunc kofile_attach_vfunc = { .size = (KoSize)kofile_size, .delete = (KoDelete)kofile_detach, .writer = (KoWriter)kofile_writer };
 static const KoVirtualFunc kofile_stdstream_vfunc = { .size = (KoSize)kofile_size, .delete = (KoDelete)kofile_detach, .writer = (KoWriter)kofile_stdwriter };
 
-Ko* kofile_create(const char* filepath) {
-  FILE* file = fopen(filepath, "wb");
+Ko* kofile_create(const char* filepath, const char* mode) {
+  FILE* file = fopen(filepath, mode);
   if (!file) return NULL;
   KoFile* kofile = (KoFile*)malloc(sizeof (KoFile));
   if (!kofile) {

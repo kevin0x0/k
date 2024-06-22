@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 
-Ko* kofile_create(const char* filepath);
+Ko* kofile_create(const char* filepath, const char* mode);
 Ko* kofile_attach(FILE* file);
 
 

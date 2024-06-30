@@ -67,17 +67,20 @@ char* kfs_get_relpath(const char* from, const char* to) {
 }
 
 char* kfs_trunc_leaf(const char* path) {
-  size_t i = 0;
   size_t len = strlen(path);
-  char* cp_path = (char*)malloc((len + 1) * sizeof (char));
+  char* cp_path = (char*)malloc((len + 3) * sizeof (char));
   if (!cp_path) return NULL;
   strcpy(cp_path, path);
-  char* p = cp_path - 1;
-  while (*++p != '\0') {
-    if (*p == '/' || *p == '\\')
-      i = p - cp_path;
+  size_t i = len;
+  while (--i && cp_path[i] != '\\' && cp_path[i] != '/')
+    continue;
+  if (i == 0) {
+    cp_path[0] = '.';
+    cp_path[1] = '/';
+    cp_path[2] = '\0';
+  } else {
+    cp_path[i + 1] = '\0';
   }
-  cp_path[i + 1] = '\0';
   return cp_path;
 }
 

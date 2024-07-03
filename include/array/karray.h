@@ -17,26 +17,26 @@ void karray_destroy(KArray* array);
 KArray* karray_create(void);
 void karray_delete(KArray* array);
 
-static inline void* karray_swap(KArray* array, size_t index, void* value);
+static inline void* karray_swap(const KArray* array, size_t index, void* value);
 static inline bool karray_push_back(KArray* array, void* addr);
 static inline void karray_pop_back(KArray* array);
 static inline void karray_make_empty(KArray* array);
 bool karray_expand(KArray* array);
-static inline void* karray_access(KArray* array, size_t index);
-static inline void* karray_top(KArray* array);
-static inline void* karray_front(KArray* array);
-static inline size_t karray_size(KArray* array);
-static inline size_t karray_capacity(KArray* array);
+static inline void* karray_access(const KArray* array, size_t index);
+static inline void* karray_top(const KArray* array);
+static inline void* karray_front(const KArray* array);
+static inline size_t karray_size(const KArray* array);
+static inline size_t karray_capacity(const KArray* array);
 /* shrink the array to exactly fit its size */
 static inline void karray_shrink(KArray* array);
 static inline void** karray_steal(KArray* array);
-static inline void** karray_raw(KArray* array);
+static inline void** karray_raw(const KArray* array);
 
-static inline size_t karray_size(KArray* array) {
+static inline size_t karray_size(const KArray* array) {
   return array->current - array->begin;
 }
 
-static inline size_t karray_capacity(KArray* array) {
+static inline size_t karray_capacity(const KArray* array) {
   return array->end - array->begin;
 }
 
@@ -64,15 +64,15 @@ static inline void karray_pop_back(KArray* array) {
   array->current--;
 }
 
-static inline void* karray_access(KArray* array, size_t index) {
+static inline void* karray_access(const KArray* array, size_t index) {
   return array->begin[index];
 }
 
-static inline void* karray_top(KArray* array) {
+static inline void* karray_top(const KArray* array) {
   return *(array->current - 1);
 }
 
-static inline void* karray_front(KArray* array) {
+static inline void* karray_front(const KArray* array) {
   return array->begin[0];
 }
 
@@ -88,11 +88,11 @@ static inline void** karray_steal(KArray* array) {
   return ret;
 }
 
-static inline void** karray_raw(KArray* array) {
+static inline void** karray_raw(const KArray* array) {
   return array->begin;
 }
 
-static inline void* karray_swap(KArray* array, size_t index, void* value) {
+static inline void* karray_swap(const KArray* array, size_t index, void* value) {
   void* ret = array->begin[index];
   array->begin[index] = value;
   return ret;

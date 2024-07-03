@@ -25,21 +25,21 @@ kstatic void prefix##_delete(arrname* array);                                   
                                                                                 \
 static inline bool prefix##_push_back(arrname* array, kgarray_##pass(T) val);   \
 static inline void prefix##_pop_back(arrname* array, size_t npop);              \
-static inline T* prefix##_back(arrname* array);                                 \
-static inline T* prefix##_front(arrname* array);                                \
+static inline T* prefix##_back(const arrname* array);                           \
+static inline T* prefix##_front(const arrname* array);                          \
 kstatic bool prefix##_expand(arrname* array);                                   \
-static inline T* prefix##_access(arrname* array, size_t index);                 \
-static inline size_t prefix##_size(arrname* array);                             \
-static inline size_t prefix##_capacity(arrname* array);                         \
+static inline T* prefix##_access(const arrname* array, size_t index);           \
+static inline size_t prefix##_size(const arrname* array);                       \
+static inline size_t prefix##_capacity(const arrname* array);                   \
 /* shrink the array to exactly fit its size */                                  \
 static inline void prefix##_shrink(arrname* array);                             \
 static inline T* prefix##_steal(arrname* array);                                \
                                                                                 \
-static inline size_t prefix##_size(arrname* array) {                            \
+static inline size_t prefix##_size(const arrname* array) {                      \
   return array->current - array->begin;                                         \
 }                                                                               \
                                                                                 \
-static inline size_t prefix##_capacity(arrname* array) {                        \
+static inline size_t prefix##_capacity(const arrname* array) {                  \
   return array->end - array->begin;                                             \
 }                                                                               \
                                                                                 \
@@ -67,15 +67,15 @@ static inline void prefix##_pop_back(arrname* array, size_t npop) {             
   array->current -= npop;                                                       \
 }                                                                               \
                                                                                 \
-static inline T* prefix##_back(arrname* array) {                                \
+static inline T* prefix##_back(const arrname* array) {                          \
   return array->current - 1;                                                    \
 }                                                                               \
                                                                                 \
-static inline T* prefix##_front(arrname* array) {                               \
+static inline T* prefix##_front(const arrname* array) {                         \
     return array->begin;                                                        \
 }                                                                               \
                                                                                 \
-static inline T* prefix##_access(arrname* array, size_t index) {                \
+static inline T* prefix##_access(const arrname* array, size_t index) {          \
   return &array->begin[index];                                                  \
 }                                                                               \
                                                                                 \

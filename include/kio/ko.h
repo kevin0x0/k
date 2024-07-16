@@ -3,6 +3,7 @@
 
 #include "include/kio/kio_common.h"
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stddef.h>
 
 typedef struct tagKo Ko;
@@ -29,6 +30,7 @@ struct tagKo {
 
 static inline void ko_init(Ko* ko, const KoVirtualFunc* vfunc);
 void ko_delete(Ko* ko);
+static inline bool ko_compatible(Ko* ko, const KoVirtualFunc* vfunc);
 
 static inline size_t ko_bufused(Ko* ko);
 static inline size_t ko_bufsize(Ko* ko);
@@ -56,6 +58,10 @@ static inline void ko_init(Ko* ko, const KoVirtualFunc* vfunc) {
   ko->curr = NULL;
   ko->end = NULL;
   ko->headpos = 0;
+}
+
+static inline bool ko_compatible(Ko* ko, const KoVirtualFunc* vfunc) {
+  return ko->vfunc == vfunc;
 }
 
 static inline size_t ko_bufused(Ko* ko) {

@@ -2,6 +2,7 @@
 #define _K_INCLUDE_KIO_KI_H_
 
 #include "include/kio/kio_common.h"
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
 
@@ -30,6 +31,7 @@ struct tagKi {
 
 static inline void ki_init(Ki* ki, const KiVirtualFunc* vfunc);
 static inline void ki_delete(Ki* ki);
+static inline bool ki_compatible(Ki* ki, const KiVirtualFunc* vfunc);
 
 static inline size_t ki_bufused(Ki* ki);
 static inline size_t ki_bufsize(Ki* ki);
@@ -54,6 +56,10 @@ static inline void ki_init(Ki* ki, const KiVirtualFunc* vfunc) {
   ki->curr = NULL;
   ki->end = NULL;
   ki->headpos = 0;
+}
+
+static inline bool ki_compatible(Ki* ki, const KiVirtualFunc* vfunc) {
+  return ki->vfunc == vfunc;
 }
 
 static inline void ki_delete(Ki* ki) {

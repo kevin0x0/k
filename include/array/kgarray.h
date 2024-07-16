@@ -28,13 +28,18 @@ static inline void prefix##_pop_back(arrname* array, size_t npop);              
 static inline T* prefix##_back(const arrname* array);                           \
 static inline T* prefix##_front(const arrname* array);                          \
 kstatic bool prefix##_expand(arrname* array);                                   \
+kstatic bool prefix##_recap(arrname* array, size_t new_size);                   \
 static inline T* prefix##_access(const arrname* array, size_t index);           \
+static inline void prefix##_setsize(arrname* array, size_t size);               \
 static inline size_t prefix##_size(const arrname* array);                       \
 static inline size_t prefix##_capacity(const arrname* array);                   \
 /* shrink the array to exactly fit its size */                                  \
 static inline void prefix##_shrink(arrname* array);                             \
 static inline T* prefix##_steal(arrname* array);                                \
                                                                                 \
+static inline void prefix##_setsize(arrname* array, size_t size) {              \
+  array->current = array->begin + size;                                         \
+}                                                                               \
 static inline size_t prefix##_size(const arrname* array) {                      \
   return array->current - array->begin;                                         \
 }                                                                               \
@@ -125,15 +130,19 @@ kstatic void prefix##_delete(arrname* array) {                                  
   free(array);                                                                  \
 }                                                                               \
                                                                                 \
-kstatic bool prefix##_expand(arrname* array) {                                  \
+kstatic bool prefix##_recap(arrname* array, size_t new_size) {                  \
   size_t old_size = prefix##_size(array);                                       \
-  size_t new_size = old_size * 2;                                               \
   T* new_array = (T*)realloc(array->begin, sizeof (T) * new_size);              \
   if (k_unlikely(!new_array)) return false;                                     \
   array->current = new_array + old_size;                                        \
   array->begin = new_array;                                                     \
   array->end = new_array + new_size;                                            \
   return true;                                                                  \
+}                                                                               \
+                                                                                \
+kstatic bool prefix##_expand(arrname* array) {                                  \
+  size_t old_size = prefix##_size(array);                                       \
+  return prefix##_recap(array, old_size * 2);                                   \
 }                                                                               
 
 #endif

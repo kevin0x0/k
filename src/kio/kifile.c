@@ -28,10 +28,12 @@ static void kifile_close(KiFile* kifile);
 static void kifile_detach(KiFile* kifile);
 static void kifile_reader_keepcontent(KiFileKeepContent* kifile);
 static void kifile_detach_keepcontent(KiFileKeepContent* kifile);
+static void kifile_stdreader(KiFile* kifile);
 
 static const KiVirtualFunc kifile_create_vfunc = { .size = (KiSize)kifile_size, .delete = (KiDelete)kifile_close, .reader = (KiReader)kifile_reader };
 static const KiVirtualFunc kifile_attach_vfunc = { .size = (KiSize)kifile_size, .delete = (KiDelete)kifile_detach, .reader = (KiReader)kifile_reader };
 static const KiVirtualFunc kifile_attach_keepcontent_vfunc = { .size = (KiSize)kifile_size, .delete = (KiDelete)kifile_detach_keepcontent, .reader = (KiReader)kifile_reader_keepcontent };
+static const KiVirtualFunc kifile_stdin_vfunc = { .size = (KiSize)kifile_size, .delete = (KiDelete)kifile_detach, .reader = (KiReader)kifile_stdreader };
 
 Ki* kifile_create(const char* filepath, const char* mode) {
   FILE* file = fopen(filepath, mode);
@@ -53,6 +55,15 @@ Ki* kifile_attach(FILE* file) {
   kifile->file = file;
   kifile->default_bufsize = KIFILE_BUFSIZE;
   ki_init((Ki*)kifile, &kifile_attach_vfunc);
+  return (Ki*)kifile;
+}
+
+Ki* kifile_attach_stdin(FILE* file) {
+  KiFile* kifile = (KiFile*)malloc(sizeof (KiFile));
+  if (!kifile) return NULL;
+  kifile->file = file;
+  kifile->default_bufsize = KIFILE_BUFSIZE;
+  ki_init((Ki*)kifile, &kifile_stdin_vfunc);
   return (Ki*)kifile;
 }
 
@@ -109,6 +120,25 @@ static void kifile_reader_keepcontent(KiFileKeepContent* kifile) {
   }
   ki_setbuf((Ki*)kifile, kifile->buf + readpos, kifile->curr - (kifile->buf + readpos), readpos);
   return;
+}
+
+static void kifile_stdreader(KiFile* kifile) {
+  KioFileOffset readpos = ki_tell((Ki*)kifile);
+  if (fseek(kifile->file, readpos, SEEK_SET)) {
+    ki_setbuf((Ki*)kifile, ki_getbuf((Ki*)kifile), 0, readpos);
+    return;
+  }
+  void* buf = ki_getbuf((Ki*)kifile);
+  if (!buf && !(buf = malloc(kifile->default_bufsize)))
+      return;
+  FILE* f = kifile->file;
+  int c;
+  size_t readsize = 0;
+  unsigned char* ucbuf = (unsigned char*)buf;
+  while ((c = fgetc(f)) != EOF && c != '\n' && readsize < kifile->default_bufsize)
+    ucbuf[readsize++] = (unsigned char)c;
+  ucbuf[readsize++] = (unsigned char)c;
+  ki_setbuf((Ki*)kifile, buf, readsize, readpos);
 }
 
 static void kifile_close(KiFile* kifile) {

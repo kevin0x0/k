@@ -124,10 +124,6 @@ static void kifile_reader_keepcontent(KiFileKeepContent* kifile) {
 
 static void kifile_stdreader(KiFile* kifile) {
   KioFileOffset readpos = ki_tell((Ki*)kifile);
-  if (fseek(kifile->file, readpos, SEEK_SET)) {
-    ki_setbuf((Ki*)kifile, ki_getbuf((Ki*)kifile), 0, readpos);
-    return;
-  }
   void* buf = ki_getbuf((Ki*)kifile);
   if (!buf && !(buf = malloc(kifile->default_bufsize)))
       return;

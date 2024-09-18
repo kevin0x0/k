@@ -11,6 +11,9 @@
 #define kgarray_pass_ref_get(val)   *val
 #define kgarray_pass_val_get(val)   val
 
+#define kgarray_static              static
+#define kgarray_nonstatic
+
 #define kgarray_decl(T, arrname, prefix, pass, kstatic)                         \
 typedef struct tag##arrname {                                                   \
   T* begin;                                                                     \
@@ -18,17 +21,17 @@ typedef struct tag##arrname {                                                   
   T* current;                                                                   \
 } arrname;                                                                      \
                                                                                 \
-kstatic bool prefix##_init(arrname* array, size_t size);                        \
-kstatic void prefix##_destroy(arrname* array);                                  \
-kstatic arrname* prefix##_create(size_t size);                                  \
-kstatic void prefix##_delete(arrname* array);                                   \
+kgarray_##kstatic bool prefix##_init(arrname* array, size_t size);              \
+kgarray_##kstatic void prefix##_destroy(arrname* array);                        \
+kgarray_##kstatic arrname* prefix##_create(size_t size);                        \
+kgarray_##kstatic void prefix##_delete(arrname* array);                         \
                                                                                 \
 static inline bool prefix##_push_back(arrname* array, kgarray_##pass(T) val);   \
 static inline void prefix##_pop_back(arrname* array, size_t npop);              \
 static inline T* prefix##_back(const arrname* array);                           \
 static inline T* prefix##_front(const arrname* array);                          \
-kstatic bool prefix##_expand(arrname* array);                                   \
-kstatic bool prefix##_recap(arrname* array, size_t new_size);                   \
+kgarray_##kstatic bool prefix##_expand(arrname* array);                         \
+kgarray_##kstatic bool prefix##_recap(arrname* array, size_t new_size);         \
 static inline T* prefix##_access(const arrname* array, size_t index);           \
 static inline void prefix##_setsize(arrname* array, size_t size);               \
 static inline size_t prefix##_size(const arrname* array);                       \
@@ -95,7 +98,7 @@ static inline T* prefix##_steal(arrname* array) {                               
 
 
 #define kgarray_impl(T, arrname, prefix, pass, kstatic)                         \
-kstatic bool prefix##_init(arrname* array, size_t size) {                       \
+kgarray_##kstatic bool prefix##_init(arrname* array, size_t size) {             \
   if (k_unlikely(!array)) return false;                                         \
   if (k_unlikely(!(array->begin = (T*)malloc(sizeof (T) * size)))) {            \
     array->end = NULL;                                                          \
@@ -108,7 +111,7 @@ kstatic bool prefix##_init(arrname* array, size_t size) {                       
   return true;                                                                  \
 }                                                                               \
                                                                                 \
-kstatic void prefix##_destroy(arrname* array) {                                 \
+kgarray_##kstatic void prefix##_destroy(arrname* array) {                       \
   if (k_unlikely(!array)) return;                                               \
   free(array->begin);                                                           \
   array->begin = NULL;                                                          \
@@ -116,7 +119,7 @@ kstatic void prefix##_destroy(arrname* array) {                                 
   array->current = NULL;                                                        \
 }                                                                               \
                                                                                 \
-kstatic arrname* prefix##_create(size_t size) {                                 \
+kgarray_##kstatic arrname* prefix##_create(size_t size) {                       \
   arrname* array = (arrname*)malloc(sizeof (arrname));                          \
   if (k_unlikely(!array || !prefix##_init(array, size))) {                      \
     prefix##_delete(array);                                                     \
@@ -125,12 +128,12 @@ kstatic arrname* prefix##_create(size_t size) {                                 
   return array;                                                                 \
 }                                                                               \
                                                                                 \
-kstatic void prefix##_delete(arrname* array) {                                  \
+kgarray_##kstatic void prefix##_delete(arrname* array) {                        \
   prefix##_destroy(array);                                                      \
   free(array);                                                                  \
 }                                                                               \
                                                                                 \
-kstatic bool prefix##_recap(arrname* array, size_t new_size) {                  \
+kgarray_##kstatic bool prefix##_recap(arrname* array, size_t new_size) {        \
   size_t old_size = prefix##_size(array);                                       \
   T* new_array = (T*)realloc(array->begin, sizeof (T) * new_size);              \
   if (k_unlikely(!new_array)) return false;                                     \
@@ -140,7 +143,7 @@ kstatic bool prefix##_recap(arrname* array, size_t new_size) {                  
   return true;                                                                  \
 }                                                                               \
                                                                                 \
-kstatic bool prefix##_expand(arrname* array) {                                  \
+kgarray_##kstatic bool prefix##_expand(arrname* array) {                        \
   size_t old_size = prefix##_size(array);                                       \
   return prefix##_recap(array, old_size * 2);                                   \
 }                                                                               

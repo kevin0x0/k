@@ -5,13 +5,13 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 #ifdef _WIN32
 #include <windows.h>
 #include <direct.h>
 #else
 #include <unistd.h>
-#include <errno.h>
 #endif
 
 char* kfs_get_bin_dir(void) {

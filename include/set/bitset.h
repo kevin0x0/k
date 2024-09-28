@@ -14,7 +14,7 @@
 #define kbitset_ctz(x)      (kbit_ctz(x))
 #define kbitset_popcount(x) (kbit_popcount(x))
 
-typedef uint64_t KevBitSetInt;
+typedef size_t KevBitSetInt;
 
 typedef struct tagKBitSet {
   KevBitSetInt* bits;
